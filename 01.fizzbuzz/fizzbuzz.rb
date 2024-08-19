@@ -1,5 +1,5 @@
 # FizzBuzz問題(Ruby)
-for number in 1..20 do
+(1..20).each do |number|
     if number % 3 == 0 && number % 5 == 0
         puts "FizzBuzz"
     elsif number % 3 == 0
@@ -10,4 +10,3 @@ for number in 1..20 do
         puts number
     end
 end
-
