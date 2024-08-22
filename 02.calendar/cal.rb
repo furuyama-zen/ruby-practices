@@ -13,7 +13,7 @@ opt.parse!(ARGV)
 year = option[:y] ? option[:y].to_i : default_date.year
 month = option[:m] ? option[:m].to_i : default_date.month
 
-start_date = Date.new(year, month)
+start_date = Date.new(year, month, 1)
 end_date = Date.new(year, month, -1)
 
 puts "      #{month}月 #{year}"
@@ -23,8 +23,11 @@ print "   " * start_date.wday
 
 (start_date..end_date).each do |date|
   print date.day.to_s.rjust(2)
-  print " " if !date.saturday?
-  puts if date.saturday?
+  if date.saturday?
+    puts
+  else
+    print " "
+  end
 end
 
 puts
