@@ -3,59 +3,37 @@
 
 score = ARGV[0]
 scores = score.split(',')
+
 shots = []
-scores.each do |s|
-  if s == 'X'
+scores.each_with_index do |s, i|
+  if s == 'X' && i <= 15
     shots << 10
     shots << 0
+  elsif s == 'X'
+    shots << 10
   else
     shots << s.to_i
   end
 end
 
 frames = shots.each_slice(2).to_a
-exclude_last_frame = frames[0..8]
-last_frame = []
-
-frames[9..].each do |frame|
-  frame.each do |number|
-    last_frame.push(number) if number.positive?
-  end
-end
-
-last_frame[0] = 0 if last_frame[0].nil?
-last_frame[1] = 0 if last_frame[1].nil?
-last_frame[2] = 0 if last_frame[2].nil?
-
+p frames
+strike = 10
 point = 0
-exclude_last_frame.each_with_index do |frame, i|
-  if i <= 6 && frame[0] == 10 && exclude_last_frame[i + 1][0] == 10 && exclude_last_frame[i + 2][0] == 10
-    point += 30
-  elsif i == 7 && frame[0] == 10 && exclude_last_frame[i + 1][0] == 10 && last_frame[0] == 10
-    point += 30
-  elsif i == 8 && frame[0] == 10 && last_frame[0] == 10 && last_frame[1] == 10
-    point += 30
-  elsif i <= 6 && frame[0] == 10 && exclude_last_frame[i + 1][0] == 10 && exclude_last_frame[i + 2][0] != 10
-    point += 10 + exclude_last_frame[i + 1][0] + exclude_last_frame[i + 2][0]
-  elsif i <= 6 && frame[0] == 10
-    point += 10 + exclude_last_frame[i + 1][0] + exclude_last_frame[i + 1][1]
-  elsif i == 7 && frame[0] == 10
-    point += 10 + exclude_last_frame[i + 1][0] + last_frame[0]
-  elsif i == 8 && frame[0] == 10
-    point += 10 + last_frame[0] + last_frame[1]
-  elsif i <= 7 && frame.sum == 10
-    point += 10 + exclude_last_frame[i + 1][0]
-  elsif i == 8 && frame.sum == 10
-    point += 10 + last_frame[0]
-  elsif i <= 6 && frame[0] == 10
-    point += 10 + exclude_last_frame[i + 1][0] + exclude_last_frame[i + 1][1]
-  elsif i == 7 && frame[0] == 10
-    point += 10 + exclude_last_frame[i + 1][0] + last_frame[0]
-  elsif i == 8 && frame[0] == 10
-    point += 10 + last_frame[0] + last_frame[1]
+frames.each_with_index do |frame, i|
+  if i <= 8 && frame[0] == strike
+    if frames[i + 1][0] == strike && frames[i + 2][0] == strike
+      point += 30
+    elsif frames[i + 1][0] == strike && frames[i + 1][1].zero?
+      point += 20 + frames[i + 2][0]
+    else
+      point += 10 + frames[i + 1][0] + frames[i + 1][1]
+    end
+  elsif i <= 8 && frame.sum == 10
+    point += 10 + frames[i + 1][0]
   else
     point += frame.sum
   end
 end
 
-p point + last_frame.sum
+p point
