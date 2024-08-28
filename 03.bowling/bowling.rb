@@ -17,7 +17,7 @@ scores.each_with_index do |s, i|
 end
 
 frames = shots.each_slice(2).to_a
-p frames
+
 strike = 10
 point = 0
 frames.each_with_index do |frame, i|
