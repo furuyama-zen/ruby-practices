@@ -6,33 +6,30 @@ scores = score.split(',')
 
 shots = []
 scores.each_with_index do |s, i|
-  if s == 'X' && i <= 15
+  if s == 'X'
     shots << 10
-    shots << 0
-  elsif s == 'X'
-    shots << 10
+    shots << 0 if i <= 15
   else
     shots << s.to_i
   end
 end
 
-frames = shots.each_slice(2).to_a
+FRAMES = shots.each_slice(2).to_a
 
-strike = 10
+STRIKE = 10
 point = 0
-frames.each_with_index do |frame, i|
-  if i <= 8 && frame[0] == strike
-    if frames[i + 1][0] == strike && frames[i + 2][0] == strike
-      point += 30
-    elsif frames[i + 1][0] == strike && frames[i + 1][1].zero?
-      point += 20 + frames[i + 2][0]
-    else
-      point += 10 + frames[i + 1][0] + frames[i + 1][1]
-    end
-  elsif i <= 8 && frame.sum == 10
-    point += 10 + frames[i + 1][0]
-  else
-    point += frame.sum
+FRAMES.each_with_index do |frame, i|
+  point += frame.sum
+  next if frame.sum != 10 || i >= 9
+
+  if frame[0] == STRIKE && FRAMES[i + 1][0] == STRIKE && FRAMES[i + 2][0] == STRIKE
+    point += 20
+  elsif frame[0] == STRIKE && FRAMES[i + 1][0] == STRIKE && FRAMES[i + 1][1].zero?
+    point += 10 + FRAMES[i + 2][0]
+  elsif frame[0] == STRIKE
+    point += FRAMES[i + 1][0] + FRAMES[i + 1][1]
+  elsif frame.sum == 10
+    point += FRAMES[i + 1][0]
   end
 end
 
