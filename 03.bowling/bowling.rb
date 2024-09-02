@@ -32,10 +32,6 @@ frames.each_with_index do |frame, i|
            else
              frames[i + 1][1]
            end
-
-  next if frame[0] == STRIKE
-
-  point += frames[i + 1][0]
 end
 
 p point
