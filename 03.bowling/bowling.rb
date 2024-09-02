@@ -22,17 +22,20 @@ frames.each_with_index do |frame, i|
   point += frame.sum
   next if frame.sum != 10 || i >= 9
 
-  if frame[0] == STRIKE
-    if frames[i + 1][0] == STRIKE && frames[i + 2][0] == STRIKE
-      point += 20
-    elsif frames[i + 1][0] == STRIKE && frames[i + 1][1].zero?
-      point += 10 + frames[i + 2][0]
-    else
-      point += frames[i + 1][0] + frames[i + 1][1]
-    end
-  elsif frame.sum == 10
-    point += frames[i + 1][0]
-  end
+  point += frames[i + 1][0]
+  next if frame[0] != STRIKE
+
+  point += if frames[i + 1][0] == STRIKE && frames[i + 2][0] == STRIKE
+             10
+           elsif frames[i + 1][0] == STRIKE && frames[i + 1][1].zero?
+             frames[i + 2][0]
+           else
+             frames[i + 1][1]
+           end
+
+  next if frame[0] == STRIKE
+
+  point += frames[i + 1][0]
 end
 
 p point
